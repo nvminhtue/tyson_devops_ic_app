@@ -1,5 +1,5 @@
-"use strict";
+"use strict"
 
 export const isMobileScreenSize = () => {
-  return window.matchMedia("(max-width: 767px)").matches;
-};
+  return window.matchMedia("(max-width: 767px)").matches
+}

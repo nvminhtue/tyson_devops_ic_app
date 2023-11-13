@@ -157,21 +157,21 @@
         # Controversial and experimental checks (opt-in, just replace `false` with `[]`)
         #
         {Credo.Check.Readability.StrictModuleLayout,
-          [
-            order:
-              ~w/shortdoc moduledoc behaviour use import alias require module_attribute defstruct callback public_fun private_fun/a,
-            ignore: ~w/callback_impl/a
-          ]},
+         [
+           order:
+             ~w/shortdoc moduledoc behaviour use import alias require module_attribute defstruct callback public_fun private_fun/a,
+           ignore: ~w/callback_impl/a
+         ]},
         {Credo.Check.Consistency.MultiAliasImportRequireUse,
-          files: %{
-            excluded: [
-              "lib/tyson_devops_ic_app.ex",
-              "lib/tyson_devops_ic_app_web.ex",
-              "test/support/conn_case.ex",
-              "test/support/data_case.ex",
-              "test/support/feature_case.ex"
-            ]
-          }},
+         files: %{
+           excluded: [
+             "lib/tyson_devops_ic_app.ex",
+             "lib/tyson_devops_ic_app_web.ex",
+             "test/support/conn_case.ex",
+             "test/support/data_case.ex",
+             "test/support/feature_case.ex"
+           ]
+         }},
         {Credo.Check.Consistency.UnusedVariableNames, false},
         {Credo.Check.Design.DuplicatedCode, files: %{excluded: ["**/*_test.exs"]}},
         {Credo.Check.Readability.AliasAs, false},

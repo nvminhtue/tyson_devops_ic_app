@@ -1,7 +1,7 @@
 defmodule TysonDevopsIcAppWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :tyson_devops_ic_app
 
-  if Application.compile_env(:tyson_devops_ic_app, :sql_sandbox), do: plug Phoenix.Ecto.SQL.Sandbox
+  if Application.compile_env(:tyson_devops_ic_app, :sql_sandbox), do: plug(Phoenix.Ecto.SQL.Sandbox)
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.

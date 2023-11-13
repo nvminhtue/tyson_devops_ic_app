@@ -40,6 +40,7 @@ if config_env() == :prod do
       Environment variable PHX_HOST is missing.
       Set the Heroku endpoint to this variable.
       """
+
   port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :tyson_devops_ic_app, TysonDevopsIcAppWeb.Endpoint,

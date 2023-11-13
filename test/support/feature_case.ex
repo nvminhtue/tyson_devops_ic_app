@@ -3,7 +3,6 @@ defmodule TysonDevopsIcAppWeb.FeatureCase do
 
   using do
     quote do
-
       use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
       use Wallaby.Feature
