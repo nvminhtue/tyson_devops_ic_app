@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:14.2
+    container_name: tyson_devops_ic_app_db
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=tyson_devops_ic_app_dev
+    ports:
+      - "5432:5432"

@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  build:
+    build:
+      context: .
+      cache_from:
+        - tyson_devops_ic_app-build
+      target: build
+    image: tyson_devops_ic_app-build
+
+  app:
+    build:
+      context: .
+      cache_from:
+        - tyson_devops_ic_app-build
+        - tyson_devops_ic_app
+      target: app
+    image: tyson_devops_ic_app
