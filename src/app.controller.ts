@@ -11,7 +11,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get()
+  @Get('/hello')
   @Render('index.hbs')
   getHelloWorld() {
     return { message: this.appService.getHello() };
