@@ -1,125 +1,73 @@
-[![Build Status](CI_BADGE_URL goes here)](REPO_URL goes here)
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+</p>
 
-## Introduction
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-> *App introduction goes here ...*
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Project Setup
+## Description
 
-### Erlang & Elixir
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-- Erlang 26.1
+## Installation
 
-- Elixir 1.15.7
+```bash
+$ yarn install
+```
 
-### Node
+## Running the app
 
-- Node 16.15.0
+```bash
+# development
+$ yarn run start
 
-- Recommended version manager.
+# watch mode
+$ yarn run start:dev
 
-  - [asdf](https://github.com/asdf-vm/asdf)
-  - [asdf-erlang](https://github.com/asdf-vm/asdf-erlang)
-  - [asdf-elixir](https://github.com/asdf-vm/asdf-elixir)
+# production mode
+$ yarn run start:prod
+```
 
-  - [asdf-node](https://github.com/asdf-vm/asdf-node)
+## Test
 
+```bash
+# unit tests
+$ yarn run test
 
-### Development
+# e2e tests
+$ yarn run test:e2e
 
-- Install [Docker for Mac](https://docs.docker.com/docker-for-mac/install/)
+# test coverage
+$ yarn run test:cov
+```
 
-- Setup and boot the Docker containers:
+## Support
 
-  ```sh
-  make docker_setup
-  ```
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-- Install Elixir dependencies:
+## Stay in touch
 
-  ```sh
-  mix deps.get
-  ```
+- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-- Install Node dependencies:
+## License
 
-  ```sh
-  npm install --prefix assets
-  ```
-
-- Install `chromedriver` for Wallaby browser tests
-
-  Homebrew
-
-  ```sh
-  brew install --cask chromedriver
-  ```
-
-  Debian/Ubuntu
-
-  ```sh
-  brew install --cask chromedriver
-  ```
-
-- Setup the databases:
-
-  ```sh
-  mix ecto.setup
-  ```
-
-- Start the Phoenix app
-
-  ```sh
-  iex -S mix phx.server
-  ```
-
-- Run all tests:
-
-  ```sh
-  mix test
-  ```
-
-- Run tests with `watch` option:
-
-  ```sh
-  mix test.interactive # Watch the whole test suite
-
-  mix test.interactive test_file_path # Watch a specific test file
-
-  mix test.interactive test_file_path:line_number # Watch a specific test line number
-  ```
-
-- Run all lint:
-
-  ```sh
-  mix codebase
-  ```
-
-- Fix all lint:
-
-  ```sh
-  mix codebase.fix
-  ```
-
-- Test coverage:
-
-  ```sh
-  mix coverage
-  ```
-
-### Production
-
-- Build Docker image
-
-  ```sh
-  docker-compose build
-  ```
-
-### CI/CD
-
-The project relies entirely on [Github Actions](https://github.com/features/actions) for CI/CD via multiple workflows located under the [`.github/workflows/`](.github/workflows) directory.
-Please check out the [`.github/workflows/README.md`](.github/workflows/README.md) file for further instructions.
-
-## Project documentation
-
-Most of the documentation is located in the `.github/wiki` directory, which is published to the [project's Github wiki](https://github.com/[REPO]/wiki).
+Nest is [MIT licensed](LICENSE).
