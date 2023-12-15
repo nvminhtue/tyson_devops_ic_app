@@ -1,0 +1,22 @@
+name: Lint
+
+on:
+  pull_request:
+
+jobs:
+  main:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+      - run: yarn install --ignore-scripts
+
+      - name: Lint
+        run: yarn lint && yarn format
