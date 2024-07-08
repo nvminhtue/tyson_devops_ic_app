@@ -1,0 +1,85 @@
+name: Deploy to Staging
+
+on:
+    push:
+        branches:
+            - develop
+    workflow_dispatch:
+
+env:
+    ECS_CLUSTER: devops-ic-staging-ecs-cluster
+    ECR_REPOSITORY: devops-ic
+    ECS_SERVICE: devops-ic-tyson-app-staging-service
+    ECS_TASK_DEFINITION: devops-ic-tyson-app-staging-service
+    CONTAINER_NAME: devops-ic-tyson-app-staging
+    REGION: ap-southeast-1
+    NODE_ENV: production
+    APP_ENV: staging
+    PORT: 4000
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v1.7.0
+              with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-region: ${{ env.REGION }}
+                # TODO: Can NOT set as `true` because the `image` output will be override to be nil
+                mask-aws-account-id: false
+
+            - name: Login to AWS ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@v2.0.1
+
+            - name: Build, tag, and push image to AWS ECR
+              id: build-image
+              env:
+                ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                IMAGE_NAME: ${{ env.ECR_REPOSITORY }}-${{ env.APP_ENV }}-${{ github.ref_name }}-${{ github.workflow_sha }}
+              run: |
+                docker build . \
+                -t $IMAGE_REPOSITORY:$IMAGE_NAME \
+                echo "image=$IMAGE_REPOSITORY:$IMAGE_NAME" >> $GITHUB_OUTPUT
+            
+    deploy:
+        name: Deploy
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v1.7.0
+              with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-region: ${{ env.REGION }}
+
+            - name: Login to Amazon ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@v2.0.1
+
+            - name: Download task definition
+              run: |
+                aws ecs describe-task-definition --task-definition ${{ env.ECS_TASK_DEFINITION }} --query taskDefinition > task-definition.json
+
+            - name: Fill in the new image ID in the Amazon ECS task definition
+              id: task-def
+              uses: aws-actions/amazon-ecs-render-task-definition@v1.0.0
+              with:
+                task-definition: task-definition.json
+                container-name: ${{ env.CONTAINER_NAME }}
+                image: ${{ needs.build.outputs.image }}
+
+            - name: Trigger ECS Deployment
+              uses: aws-actions/amazon-ecs-deploy-task-definition@v1.0.0
+              with:
+                task-definition: ${{ steps.task-def.outputs.task-definition }}
+                service: ${{ env.ECS_SERVICE }}
+                cluster: ${{ env.ECS_CLUSTER }}
+                wait-for-service-stability: true
