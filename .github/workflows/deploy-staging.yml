@@ -2,8 +2,9 @@ name: Deploy to Staging
 
 on:
     push:
-        branches:
-            - develop
+      branches:
+        - develop
+        - chore/gh-2-3-add-cicd-github-action
     workflow_dispatch:
 
 env:
@@ -31,7 +32,6 @@ jobs:
                 aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                 aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                 aws-region: ${{ env.REGION }}
-                # TODO: Can NOT set as `true` because the `image` output will be override to be nil
                 mask-aws-account-id: false
 
             - name: Login to AWS ECR
