@@ -42,10 +42,11 @@ jobs:
             - name: Build, tag, and push image to AWS ECR
               id: build-image
               env:
-                ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                IMAGE_NAME: ${{ env.ECR_REPOSITORY }}-${{ env.APP_ENV }}-${{ github.ref_name }}-${{ github.workflow_sha }}
+                ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}
+                IMAGE_NAME: ${{ env.APP_ENV }}-${{ github.ref_name }}-${{ github.workflow_sha }}
               run: |
                 docker buildx build . -t $ECR_REGISTRY:$IMAGE_NAME
+                docker push -a $ECR_REGISTRY
                 echo "image=$ECR_REGISTRY:$IMAGE_NAME" >> $GITHUB_OUTPUT
             
     deploy:
