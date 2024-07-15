@@ -43,11 +43,10 @@ jobs:
               id: build-image
               env:
                 ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}
-                IMAGE_NAME: ${{ env.APP_ENV }}-${{ github.ref_name }}-${{ github.workflow_sha }}
               run: |
-                docker buildx build . -t $ECR_REGISTRY:$IMAGE_NAME
+                docker buildx build . -t $ECR_REGISTRY:$APP_ENVIRONMENT-$APP_NAME-$CI_REF_NAME_SLUG-$CI_SHA_SHORT
                 docker push -a $ECR_REGISTRY
-                echo "image=$ECR_REGISTRY:$IMAGE_NAME" >> $GITHUB_OUTPUT
+                echo "image=$ECR_REGISTRY:$APP_ENVIRONMENT-$APP_NAME-$CI_REF_NAME_SLUG-$CI_SHA_SHORT" >> $GITHUB_OUTPUT
             
     deploy:
         name: Deploy
