@@ -11,7 +11,6 @@ RUN yarn install
 COPY . .
 RUN yarn build
 
-# FROM node:20:10.0-alpine as app_image
 FROM node:20.10.0 as app_image
 
 WORKDIR /app
