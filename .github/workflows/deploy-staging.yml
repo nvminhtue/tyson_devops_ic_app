@@ -10,7 +10,7 @@ on:
 env:
     ECS_CLUSTER: devops-ic-staging-ecs-cluster
     ECR_REPOSITORY: devops-ic
-    ECS_SERVICE: devops-ic-tyson-app-staging-service
+    ECS_SERVICE: devops-ic-staging-ecs-service
     ECS_TASK_DEFINITION: devops-ic-staging-service
     CONTAINER_NAME: devops-ic-staging
     REGION: ap-southeast-1
@@ -85,7 +85,7 @@ jobs:
                 image: ${{ needs.build.outputs.image }}
 
             - name: Trigger ECS Deployment
-              uses: aws-actions/amazon-ecs-deploy-task-definition@v1.0.0
+              uses: aws-actions/amazon-ecs-deploy-task-definition@v1.6.0
               with:
                 task-definition: ${{ steps.task-def.outputs.task-definition }}
                 service: ${{ env.ECS_SERVICE }}
