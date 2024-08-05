@@ -23,7 +23,7 @@ jobs:
         name: Build
         environment: staging
         runs-on: ubuntu-latest
-
+        timeout-minutes: 10
         outputs:
           image: ${{ steps.build-image.outputs.image }}
 
@@ -60,6 +60,7 @@ jobs:
         needs: build
         environment: staging
         runs-on: ubuntu-latest
+        timeout-minutes: 10
         steps:
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v1.7.0
