@@ -1,11 +1,11 @@
 name: Deploy to Staging
 
 on:
-    push:
-      branches:
-        - develop
-        - chore/gh-2-3-add-cicd-github-action
-    workflow_dispatch:
+  push:
+    branches:
+      - develop
+      - chore/gh-2-3-add-cicd-github-action
+  workflow_dispatch:
 
 env:
     ECS_CLUSTER: devops-ic-staging-ecs-cluster
