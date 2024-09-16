@@ -1,27 +1,26 @@
-name: Deploy to Staging
+name: Deploy to Production
 
 on:
   push:
     branches:
-      - develop
-      - chore/gh-2-3-add-cicd-github-action
+      - main
   workflow_dispatch:
 
 env:
-    ECS_CLUSTER: devops-ic-staging-ecs-cluster
+    ECS_CLUSTER: devops-ic-production-ecs-cluster
     ECR_REPOSITORY: devops-ic
-    ECS_SERVICE: devops-ic-staging-ecs-service
-    ECS_TASK_DEFINITION: devops-ic-staging-service
-    CONTAINER_NAME: devops-ic-staging
+    ECS_SERVICE: devops-ic-production-ecs-service
+    ECS_TASK_DEFINITION: devops-ic-production-service
+    CONTAINER_NAME: devops-ic-production
     REGION: ap-southeast-1
     NODE_ENV: production
-    APP_ENV: staging
+    APP_ENV: production
     PORT: 4000
 
 jobs:
     build:
         name: Build
-        environment: staging
+        environment: production
         runs-on: ubuntu-latest
         timeout-minutes: 10
         outputs:
@@ -58,7 +57,7 @@ jobs:
     deploy:
         name: Deploy
         needs: build
-        environment: staging
+        environment: production
         runs-on: ubuntu-latest
         timeout-minutes: 10
         steps:
