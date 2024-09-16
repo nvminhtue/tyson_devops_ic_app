@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - chore/gh-2-3-add-cicd-github-action
   workflow_dispatch:
 
 env:
