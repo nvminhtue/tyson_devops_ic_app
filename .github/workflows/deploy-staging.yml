@@ -1,17 +1,18 @@
 name: Deploy to Staging
 
 on:
-    push:
-        branches:
-            - develop
-    workflow_dispatch:
+  push:
+    branches:
+      - develop
+      - chore/gh-2-3-add-cicd-github-action
+  workflow_dispatch:
 
 env:
     ECS_CLUSTER: devops-ic-staging-ecs-cluster
     ECR_REPOSITORY: devops-ic
-    ECS_SERVICE: devops-ic-tyson-app-staging-service
-    ECS_TASK_DEFINITION: devops-ic-tyson-app-staging-service
-    CONTAINER_NAME: devops-ic-tyson-app-staging
+    ECS_SERVICE: devops-ic-staging-ecs-service
+    ECS_TASK_DEFINITION: devops-ic-staging-service
+    CONTAINER_NAME: devops-ic-staging
     REGION: ap-southeast-1
     NODE_ENV: production
     APP_ENV: staging
@@ -20,18 +21,25 @@ env:
 jobs:
     build:
         name: Build
+        environment: staging
         runs-on: ubuntu-latest
+        timeout-minutes: 10
+        outputs:
+          image: ${{ steps.build-image.outputs.image }}
+
         steps:
+            - name: Expose useful environment variables
+              uses: FranzDiebold/github-env-vars-action@v2.8.0
+
             - name: Checkout
               uses: actions/checkout@v4
 
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v1.7.0
               with:
-                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
                 aws-region: ${{ env.REGION }}
-                # TODO: Can NOT set as `true` because the `image` output will be override to be nil
                 mask-aws-account-id: false
 
             - name: Login to AWS ECR
@@ -41,23 +49,24 @@ jobs:
             - name: Build, tag, and push image to AWS ECR
               id: build-image
               env:
-                ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                IMAGE_NAME: ${{ env.ECR_REPOSITORY }}-${{ env.APP_ENV }}-${{ github.ref_name }}-${{ github.workflow_sha }}
+                ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}
               run: |
-                docker build . \
-                -t $IMAGE_REPOSITORY:$IMAGE_NAME \
-                echo "image=$IMAGE_REPOSITORY:$IMAGE_NAME" >> $GITHUB_OUTPUT
+                docker buildx build . -t $ECR_REGISTRY:${APP_ENV}-${CI_REF_NAME_SLUG}-${CI_SHA_SHORT} --progress=plain --cache-to=type=gha,mode=max --cache-from=type=gha,mode=max
+                docker push -a $ECR_REGISTRY
+                echo "image=$ECR_REGISTRY:${APP_ENV}-${CI_REF_NAME_SLUG}-${CI_SHA_SHORT}" >> $GITHUB_OUTPUT
             
     deploy:
         name: Deploy
         needs: build
+        environment: staging
         runs-on: ubuntu-latest
+        timeout-minutes: 10
         steps:
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v1.7.0
               with:
-                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
                 aws-region: ${{ env.REGION }}
 
             - name: Login to Amazon ECR
@@ -77,7 +86,7 @@ jobs:
                 image: ${{ needs.build.outputs.image }}
 
             - name: Trigger ECS Deployment
-              uses: aws-actions/amazon-ecs-deploy-task-definition@v1.0.0
+              uses: aws-actions/amazon-ecs-deploy-task-definition@v1.6.0
               with:
                 task-definition: ${{ steps.task-def.outputs.task-definition }}
                 service: ${{ env.ECS_SERVICE }}
