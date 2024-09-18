@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - develop
+      - chore/gh-6-add-database
   workflow_dispatch:
     inputs:
       environment:
