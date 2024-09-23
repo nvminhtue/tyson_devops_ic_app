@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CacheModule } from '@nestjs/cache-manager';
+
+import * as redisStore from 'cache-manager-redis-store';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -19,6 +22,12 @@ import typeorm from './config/typeorm';
         configService.get('typeorm'),
     }),
     TypeOrmModule.forFeature([AppEntity]),
+    CacheModule.register({
+      isGlobal: true,
+      store: redisStore as any,
+      host: process.env.REDIS_HOST,
+      port: parseInt(process.env.REDIS_PORT, 10),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -10,6 +10,14 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
+  redis:
+    image: redis:alpine
+    container_name: devops-ic-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis:/data
+
   app:
     build:
       context: .
@@ -24,3 +32,4 @@ services:
 
 volumes:
   db:
+  redis:
