@@ -1,26 +1,35 @@
-name: Deploy to Staging
-
+name: Deploy
 on:
   push:
     branches:
+      - main
       - develop
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
 
 env:
-    ECS_CLUSTER: devops-ic-staging-ecs-cluster
+    ECS_CLUSTER: devops-ic-${{ inputs.environment }}-ecs-cluster
     ECR_REPOSITORY: devops-ic
-    ECS_SERVICE: devops-ic-staging-ecs-service
-    ECS_TASK_DEFINITION: devops-ic-staging-service
-    CONTAINER_NAME: devops-ic-staging
+    ECS_SERVICE: devops-ic-${{ inputs.environment }}-ecs-service
+    ECS_TASK_DEFINITION: devops-ic-${{ inputs.environment }}-service
+    CONTAINER_NAME: devops-ic-${{ inputs.environment }}
     REGION: ap-southeast-1
     NODE_ENV: production
-    APP_ENV: staging
+    APP_ENV: ${{ inputs.environment }}
     PORT: 4000
 
 jobs:
     build:
         name: Build
-        environment: staging
+        environment: ${{ inputs.environment }}
         runs-on: ubuntu-latest
         timeout-minutes: 10
         outputs:
@@ -57,7 +66,7 @@ jobs:
     deploy:
         name: Deploy
         needs: build
-        environment: staging
+        environment: ${{ inputs.environment }}
         runs-on: ubuntu-latest
         timeout-minutes: 10
         steps:
