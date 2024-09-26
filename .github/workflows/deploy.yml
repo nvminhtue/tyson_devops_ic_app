@@ -4,32 +4,24 @@ on:
     branches:
       - main
       - develop
+      - chore/gh-7-add-cache
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to deploy to'
-        required: true
-        default: 'production'
-        type: choice
-        options:
-          - production
-          - staging
 
 env:
-    ECS_CLUSTER: devops-ic-${{ inputs.environment }}-ecs-cluster
+    ECS_CLUSTER: devops-ic-${{ github.ref_name == 'main' && 'production' || 'staging' }}-ecs-cluster
     ECR_REPOSITORY: devops-ic
-    ECS_SERVICE: devops-ic-${{ inputs.environment }}-ecs-service
-    ECS_TASK_DEFINITION: devops-ic-${{ inputs.environment }}-service
-    CONTAINER_NAME: devops-ic-${{ inputs.environment }}
+    ECS_SERVICE: devops-ic-${{ github.ref_name == 'main' && 'production' || 'staging' }}-ecs-service
+    ECS_TASK_DEFINITION: devops-ic-${{ github.ref_name == 'main' && 'production' || 'staging' }}-service
+    CONTAINER_NAME: devops-ic-${{ github.ref_name == 'main' && 'production' || 'staging' }}
     REGION: ap-southeast-1
     NODE_ENV: production
-    APP_ENV: ${{ inputs.environment }}
+    APP_ENV: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
     PORT: 4000
 
 jobs:
     build:
         name: Build
-        environment: ${{ inputs.environment }}
+        environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
         runs-on: ubuntu-latest
         timeout-minutes: 10
         outputs:
@@ -66,7 +58,7 @@ jobs:
     deploy:
         name: Deploy
         needs: build
-        environment: ${{ inputs.environment }}
+        environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
         runs-on: ubuntu-latest
         timeout-minutes: 10
         steps:
