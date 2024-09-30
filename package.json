@@ -1,32 +1,37 @@
 {
   "name": "fronted-app",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "start:prod": "yarn m:run && node dist/main",
+    "lint": "eslint \"{src,apps,libs}/**/*.ts\" --fix",
+    "typeorm": "ts-node ./node_modules/typeorm/cli",
+    "m:run": "yarn typeorm migration:run -- -d ./src/config/typeorm.ts",
+    "m:generate": "yarn typeorm -- -d ./src/config/typeorm.ts migration:generate -p",
+    "m:create": "yarn typeorm -- migration:create",
+    "m:revert": "yarn typeorm -- -d ./src/config/typeorm.ts migration:revert"
   },
   "dependencies": {
     "@nestjs/cli": "^10.0.0",
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/typeorm": "^10.0.2",
+    "dotenv": "^16.4.5",
+    "hbs": "^4.2.0",
+    "pg": "^8.12.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "hbs": "^4.2.0"
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@nestjs/schematics": "^10.0.0",
